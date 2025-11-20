@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Route } from "react-router";
 import rootLayout from "../Layouts/rootLayout";
 import Home from "../Pages/Home/Home";
 import Coverage from "../Pages/Coverage";
@@ -7,6 +7,8 @@ import Error from "../Pages/Error";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/AuthPage/Login";
 import Register from "../Pages/AuthPage/Register";
+import Rider from "../Pages/Rider";
+import PrivateRotu from "./PrivateRotu";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +28,15 @@ export const router = createBrowserRouter([
         path: "/aboutUs",
         Component: AboutUs,
       },
+      {
+        path: "/rider",
+        element: (
+          <PrivateRotu>
+            <Rider></Rider>
+          </PrivateRotu>
+        ),
+      },
+
       {
         path: "*",
         Component: Error,

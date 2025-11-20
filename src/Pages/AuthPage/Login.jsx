@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../Hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import GoogleLogin from "./GoogleLogin";
 
 const Login = () => {
@@ -12,12 +12,16 @@ const Login = () => {
   } = useForm();
 
   const { signUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  // console.log("location in the log in page", location);
 
   const handleLogin = (data) => {
     console.log(data);
     signUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+        navigate(location?.state || "/");
       })
       .catch((error) => {
         console.log(error);
@@ -57,7 +61,9 @@ const Login = () => {
           </div>
           <button className="btn btn-neutral mt-4">Login</button>
         </fieldset>
-        <Link to="/register"><p className="text-center text-blue-500">New to Zap Shift</p></Link>
+        <Link state={location.state} to="/register">
+          <p className="text-center text-blue-500">New to Zap Shift</p>
+        </Link>
       </form>
       <GoogleLogin></GoogleLogin>
     </div>
