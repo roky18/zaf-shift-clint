@@ -1,19 +1,21 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
 
 const Sendparcel = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm();
 
   const serviceCenters = useLoaderData();
   const regionsDubble = serviceCenters.map((c) => c.region);
   const regions = [...new Set(regionsDubble)];
-  const senderRegion = watch("senderRegion");
+  const senderRegion = useWatch({ control, name: "senderRegion" });
+  const receiverRegion = useWatch({ control, name: "receiverRegion" });
 
   const districtByRegion = (region) => {
     const regieonDistrict = serviceCenters.filter((c) => c.region === region);
@@ -22,7 +24,51 @@ const Sendparcel = () => {
   };
   console.log(regions);
 
-  const handleSendParcel = (data) => {};
+  const handleSendParcel = (data) => {
+    console.log(data);
+    const isDocument = data.parcelType === "document";
+    const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+    const parcelWeight = parseFloat(data.parcelWeight);
+
+    let cost = 0;
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcelWeight < 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const minCharge = isSameDistrict ? 110 : 150;
+        const extraWeight = parcelWeight - 3;
+        const extraCharge = isSameDistrict
+          ? extraWeight * 40
+          : extraWeight * 40 + 40;
+
+        cost = minCharge + extraCharge;
+      }
+    }
+
+    console.log("Total khoros hobe", cost);
+
+    Swal.fire({
+      title: "Are You Agree with the Cosssst?",
+      text: `You will be Charged ${cost} Taka !`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, i take it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        // ---working >>>>>>
+        Swal.fire({
+          title: "Congratulation!",
+          text: "Your Oder has been Confirmed.",
+          icon: "success",
+        });
+      }
+    });
+  };
   return (
     <div>
       <h2 className="text-5xl font-bold">Send A Parcel</h2>
@@ -174,6 +220,43 @@ const Sendparcel = () => {
                 className="input w-full"
                 placeholder="Receiver Email"
               />
+
+              {/* Receiver Regions */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Receiver Regions</legend>
+                <select
+                  {...register("receiverRegion")}
+                  defaultValue="Pick a Regions"
+                  className="select"
+                >
+                  <option disabled={true}>Pick a Regions</option>
+
+                  {regions.map((r, index) => (
+                    <option value={r} key={index}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+              </fieldset>
+
+              {/* Receiver district */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Receiver District</legend>
+                <select
+                  {...register("receiverDistrict")}
+                  defaultValue="Pick a District"
+                  className="select"
+                >
+                  <option disabled={true}>Pick a District</option>
+
+                  {districtByRegion(receiverRegion).map((d, index) => (
+                    <option value={d} key={index}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </fieldset>
+
               {/* Receiver address */}
               <label className="label mt-4">Receiver Address</label>
               <input
@@ -190,14 +273,7 @@ const Sendparcel = () => {
                 className="input w-full"
                 placeholder="Receiver Phone No"
               />
-              {/* Receiver distric */}
-              <label className="label mt-4">Receiver District</label>
-              <input
-                type="text"
-                {...register("ReceiverDistrict")}
-                className="input w-full"
-                placeholder="Receiver District "
-              />
+
               {/* Receiver Instrutcion */}
               <label className="label mt-4">Pickup Instruction</label>
               <textarea
@@ -211,7 +287,7 @@ const Sendparcel = () => {
         </div>
         <input
           type="Submit"
-          className="btn btn-primary text-black"
+          className="btn btn-primary w-full mt-8 text-black"
           value="send Parcel"
         />
       </form>
