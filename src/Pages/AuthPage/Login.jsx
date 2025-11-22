@@ -3,12 +3,15 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../Hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import GoogleLogin from "./GoogleLogin";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../../Firebase/firebase";
 
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm();
 
   const { signUser } = useAuth();
@@ -20,6 +23,7 @@ const Login = () => {
     console.log(data);
     signUser(data.email, data.password)
       .then((result) => {
+        alert("Login succesful");
         console.log(result.user);
         navigate(location?.state || "/");
       })
@@ -27,6 +31,25 @@ const Login = () => {
         console.log(error);
       });
   };
+
+  const handleForgotPassword = () => {
+    const email = getValues("email");
+
+    if (!email) {
+      alert("Please enter your email first!");
+      return;
+    }
+
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        alert("Password reset email sent! Check your inbox.");
+      })
+      .catch((error) => {
+        console.log(error.message);
+        alert(error.message);
+      });
+  };
+
   return (
     <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
       <h3 className="text-3xl text-center">Welcome Back</h3>
@@ -57,13 +80,20 @@ const Login = () => {
             <p className="text-red-500">Minimun 6 charecter.</p>
           )}
           <div>
-            <a className="link link-hover">Forgot password?</a>
+            <a onClick={handleForgotPassword} className="link link-hover">
+              Forgot password?
+            </a>
           </div>
           <button className="btn btn-neutral mt-4">Login</button>
         </fieldset>
-        <Link state={location.state} to="/register">
-          <p className="text-center text-blue-500">New to Zap Shift</p>
-        </Link>
+        <div>
+          <p className="text-center ">
+            New to Zap Shift?
+            <Link state={location.state} to="/register">
+              <span className="text-blue-500">Register</span>
+            </Link>
+          </p>
+        </div>
       </form>
       <GoogleLogin></GoogleLogin>
     </div>

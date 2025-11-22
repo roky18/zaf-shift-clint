@@ -44,10 +44,10 @@ const Register = () => {
           };
           updateUserProfile(userProfile)
             .then(() => {
-              console.log("User profile update Done")
+              console.log("User profile update Done");
               navigate(location?.state || "/");
             })
-            
+
             .catch((error) => console.log(error));
         });
       })
@@ -123,14 +123,14 @@ const Register = () => {
             </p>
           )}
 
-          <div>
-            <a className="link link-hover">Forgot password?</a>
-          </div>
           <button className="btn btn-secondary mt-4">Register</button>
         </fieldset>
-        <Link state={location.state} to="/login">
-          <p className="text-center text-green-500">Already Have an Account</p>
-        </Link>
+        <p className="text-center ">
+          Already Have an Account?
+          <Link className="text-green-500" state={location.state} to="/login">
+            Please Login
+          </Link>
+        </p>
       </form>
       <GoogleLogin></GoogleLogin>
     </div>

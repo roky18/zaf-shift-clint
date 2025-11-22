@@ -23,6 +23,9 @@ const Navbar = () => {
         <NavLink to="/aboutUs">About Us</NavLink>
       </li>
       <li>
+        <NavLink to="/sendParcel">Send Parcel</NavLink>
+      </li>
+      <li>
         <NavLink to="/coverage">Coverage</NavLink>
       </li>
     </>
@@ -55,9 +58,9 @@ const Navbar = () => {
             {Links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">
+        <div className="btn btn-ghost text-xl">
           <Logo></Logo>
-        </a>
+        </div>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{Links}</ul>
@@ -68,12 +71,12 @@ const Navbar = () => {
             Log Out
           </a>
         ) : (
-          <Link to="/login">
-            <a className="btn btn-primary text-black">Log in</a>
+          <Link className="btn btn-primary text-black" to="/login">
+            Log in
           </Link>
         )}
-        <Link to="/rider">
-          <a className="btn mx-4 btn-secondary text-white ">Be a Rider</a>
+        <Link className="btn mx-4 btn-secondary text-white " to="/rider">
+          Be a Rider
         </Link>
       </div>
     </div>
