@@ -2,14 +2,19 @@ import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
+import UseAxiosSecure from "../Hooks/UseAxiosSecure";
+import useAuth from "../Hooks/useAuth";
 
 const Sendparcel = () => {
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    // formState: { errors },
   } = useForm();
+  const { user } = useAuth();
+
+  const axiosSecure = UseAxiosSecure();
 
   const serviceCenters = useLoaderData();
   const regionsDubble = serviceCenters.map((c) => c.region);
@@ -59,13 +64,17 @@ const Sendparcel = () => {
       confirmButtonText: "Yes, i take it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        // save the parcel info into DAtabase
 
-        // ---working >>>>>>
-        Swal.fire({
-          title: "Congratulation!",
-          text: "Your Oder has been Confirmed.",
-          icon: "success",
+        axiosSecure.post("/parcels", data).then((res) => {
+          console.log("after saveing parcel", res.data);
         });
+        // ---working >>>>>>
+        // Swal.fire({
+        //   title: "Congratulation!",
+        //   text: "Your Oder has been Confirmed.",
+        //   icon: "success",
+        // });
       }
     });
   };
@@ -127,6 +136,7 @@ const Sendparcel = () => {
               {...register("SenderName")}
               className="input w-full"
               placeholder="Sender Name"
+              defaultValue={user?.displayName}
             />
             {/* sender Email */}
             <label className="label">Sender Email</label>
@@ -135,6 +145,7 @@ const Sendparcel = () => {
               {...register("SenderEmail")}
               className="input w-full"
               placeholder="Sender Email"
+              defaultValue={user?.email}
             />
             {/* sender regieon */}
             <fieldset className="fieldset">
