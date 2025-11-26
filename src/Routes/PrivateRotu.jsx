@@ -3,12 +3,16 @@ import useAuth from "../Hooks/useAuth";
 import { Navigate, useLocation } from "react-router";
 
 const PrivateRotu = ({ children }) => {
-  const { user, Loading } = useAuth();
+  const { user, loading } = useAuth();
   const location = useLocation();
   console.log("location", location);
 
-  if (Loading) {
-    return <span className="loading loading-infinity loading-xl"></span>;
+  if (loading) {
+    return (
+      <div className="flex justify-center mt-50">
+        <span className="loading loading-infinity loading-xl"></span>
+      </div>
+    );
   }
   if (!user) {
     return <Navigate state={location.pathname} to="/login"></Navigate>;

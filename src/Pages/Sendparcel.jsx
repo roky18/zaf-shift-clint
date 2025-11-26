@@ -53,6 +53,7 @@ const Sendparcel = () => {
     }
 
     console.log("Total khoros hobe", cost);
+    data.cost = cost;
 
     Swal.fire({
       title: "Are You Agree with the Cosssst?",
