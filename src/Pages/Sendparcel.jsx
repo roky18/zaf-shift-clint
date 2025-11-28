@@ -75,7 +75,7 @@ const Sendparcel = () => {
             Swal.fire({
               position: "top-center",
               icon: "success",
-              title: "Parcel has created.Please",
+              title: "Parcel has created.Please Pay",
               showConfirmButton: false,
               timer: 2500,
             });
@@ -311,7 +311,7 @@ const Sendparcel = () => {
         <input
           type="Submit"
           className="btn btn-primary w-full mt-8 text-black"
-          value="send Parcel"
+          value="Send Parcel"
         />
       </form>
     </div>

@@ -4,6 +4,7 @@ import useAuth from "../../Hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import GoogleLogin from "./GoogleLogin";
 import axios from "axios";
+import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const Register = () => {
   const {
@@ -15,14 +16,15 @@ const Register = () => {
   const { registerUser, updateUserProfile } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = UseAxiosSecure();
   // console.log("location in the Register page", location);
 
   const handleRegister = (data) => {
     // console.log(data);
     const profileImg = data.photo[0];
     registerUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
+      .then(() => {
+        // console.log(result.user);
 
         // store the image in form data
         const formData = new FormData();
@@ -35,12 +37,24 @@ const Register = () => {
         }`;
 
         axios.post(imageApiUrl, formData).then((res) => {
-          console.log("after image upload", res.data.data.url);
+          const photoURL = res.data.data.url;
 
-          // update user profile to fire base
+          // create user in DAtabase ----->>
+          const userInfo = {
+            email: data.email,
+            displayName: data.name,
+            photoURL: photoURL,
+          };
+          axiosSecure.post("/users", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log("user created in the data base");
+            }
+          });
+
+          // update user profile to firebase
           const userProfile = {
             displayName: data.name,
-            photoURL: res.data.data.url,
+            photoURL: photoURL,
           };
           updateUserProfile(userProfile)
             .then(() => {
@@ -61,17 +75,6 @@ const Register = () => {
       <p className="text-2xl text-center">Please Register</p>
       <form className="card-body" onSubmit={handleSubmit(handleRegister)}>
         <fieldset className="fieldset">
-          {/* Email */}
-          <label className="label">Email</label>
-          <input
-            {...register("email", { required: true })}
-            type="email"
-            className="input"
-            placeholder="Email"
-          />
-          {errors.email?.type === "required" && (
-            <p className="text-red-500">Email is required.</p>
-          )}
           {/* Name */}
           <label className="label">Name</label>
           <input
@@ -94,6 +97,18 @@ const Register = () => {
           {errors.name?.type === "required" && (
             <p className="text-red-500">Name is required.</p>
           )}
+          {/* Email */}
+          <label className="label">Email</label>
+          <input
+            {...register("email", { required: true })}
+            type="email"
+            className="input"
+            placeholder="Email"
+          />
+          {errors.email?.type === "required" && (
+            <p className="text-red-500">Email is required.</p>
+          )}
+
           {/* PAssword */}
           <label className="label">Password</label>
           <input

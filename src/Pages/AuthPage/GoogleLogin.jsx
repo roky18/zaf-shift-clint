@@ -1,9 +1,13 @@
 import React from "react";
 import useAuth from "../../Hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
+import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const GoogleLogin = () => {
   const { signInGoogle } = useAuth();
+  // create user in database-->>
+  const axiosSecure = UseAxiosSecure();
+  // ->>>>>>>>>>
   const location = useLocation();
   const navigate = useNavigate();
   // console.log("location in Google page", location);
@@ -12,7 +16,17 @@ const GoogleLogin = () => {
     signInGoogle()
       .then((result) => {
         console.log(result.user);
-        navigate(location?.state || "/");
+
+        // create user in database ----->>>socal theke>
+        const userInfo = {
+          email: result.user.email,
+          displayName: result.user.displayName,
+          photoURL: result.user.photoURL,
+        };
+        axiosSecure.post("/users", userInfo).then((res) => {
+          console.log("user data has been store from google login", res.data);
+          navigate(location?.state || "/");
+        });
       })
       .catch((error) => {
         console.log(error);
