@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-import { FaUserCheck } from "react-icons/fa";
+import { FaEye, FaUserCheck } from "react-icons/fa";
 import { IoPersonRemoveSharp } from "react-icons/io5";
 import { FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
@@ -15,6 +15,12 @@ const ApproveRider = () => {
       return res.data;
     },
   });
+
+  // Modal related-->
+
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRider, setSelectedRider] = useState(null);
+  // --------->>>>
 
   const updateRiderStatus = (rider, status) => {
     const updateInfo = { status: status, email: rider.email };
@@ -107,6 +113,15 @@ const ApproveRider = () => {
                 </td>
                 <td>
                   <button
+                    onClick={() => {
+                      setSelectedRider(rider);
+                      setOpenModal(true);
+                    }}
+                    className="btn btn-soft btn-accent mr-3"
+                  >
+                    <FaEye></FaEye>
+                  </button>
+                  <button
                     onClick={() => handleApproval(rider)}
                     className="btn btn-soft btn-info"
                   >
@@ -130,6 +145,27 @@ const ApproveRider = () => {
           </tbody>
         </table>
       </div>
+      {/* //Modal ------>>> */}
+
+      {openModal && (
+        <dialog className="modal modal-bottom sm:modal-middle" open>
+          <div className="modal-box">
+            <h3 className="font-bold text-center text-3xl">Rider Details</h3>
+           <div className="text-center text-xl mt-6">
+             <p className="py-2"><strong>Name:</strong> {selectedRider?.name}</p>
+            <p className="py-2"><strong>Email:</strong> {selectedRider?.email}</p>
+            <p className="py-2"><strong>District:</strong> {selectedRider?.district}</p>
+            <p className="py-2"><strong>Status:</strong> {selectedRider?.status}</p>
+           </div>
+            <div className="modal-action">
+              <button onClick={() => setOpenModal(false)} className="btn ">
+                Close
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
+      {/* // ------>>> */}
     </div>
   );
 };
