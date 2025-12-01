@@ -21,6 +21,8 @@ import UserManagement from "../Pages/DashBord/UserManagement";
 import Forbiden from "../Pages/Forbiden";
 import AdminRoute from "./AdminRoute";
 import AssignRiders from "../Pages/AssignRiders";
+import AssignedDeliveries from "../Pages/AssignedDeliveries";
+import RiderRoute from "./RiderRoute";
 
 export const router = createBrowserRouter([
   {
@@ -108,6 +110,15 @@ export const router = createBrowserRouter([
         path: "payment-history",
         Component: PaymentHistroy,
       },
+
+      // Rider only route------>>>>>
+      {
+        path: "assigned-deliveries",
+        element:<RiderRoute>
+          <AssignedDeliveries></AssignedDeliveries>
+        </RiderRoute>,
+      },
+      // ____Admin only route------>>>>>
       {
         path: "approve-rider",
         element: (
