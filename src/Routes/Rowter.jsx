@@ -20,6 +20,7 @@ import ApproveRider from "../Pages/DashBord/ApproveRider";
 import UserManagement from "../Pages/DashBord/UserManagement";
 import Forbiden from "../Pages/Forbiden";
 import AdminRoute from "./AdminRoute";
+import AssignRiders from "../Pages/AssignRiders";
 
 export const router = createBrowserRouter([
   {
@@ -112,6 +113,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ApproveRider></ApproveRider>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "assign-riders",
+        element: (
+          <AdminRoute>
+            <AssignRiders></AssignRiders>
           </AdminRoute>
         ),
       },
