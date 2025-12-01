@@ -151,12 +151,20 @@ const ApproveRider = () => {
         <dialog className="modal modal-bottom sm:modal-middle" open>
           <div className="modal-box">
             <h3 className="font-bold text-center text-3xl">Rider Details</h3>
-           <div className="text-center text-xl mt-6">
-             <p className="py-2"><strong>Name:</strong> {selectedRider?.name}</p>
-            <p className="py-2"><strong>Email:</strong> {selectedRider?.email}</p>
-            <p className="py-2"><strong>District:</strong> {selectedRider?.district}</p>
-            <p className="py-2"><strong>Status:</strong> {selectedRider?.status}</p>
-           </div>
+            <div className="text-center text-xl mt-6">
+              <p className="py-2">
+                <strong>Name:</strong> {selectedRider?.name}
+              </p>
+              <p className="py-2">
+                <strong>Email:</strong> {selectedRider?.email}
+              </p>
+              <p className="py-2">
+                <strong>District:</strong> {selectedRider?.district}
+              </p>
+              <p className="py-2">
+                <strong>Status:</strong> {selectedRider?.status}
+              </p>
+            </div>
             <div className="modal-action">
               <button onClick={() => setOpenModal(false)} className="btn ">
                 Close

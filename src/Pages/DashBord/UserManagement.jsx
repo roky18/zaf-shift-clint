@@ -17,37 +17,66 @@ const UserManagement = () => {
   });
 
   const handleMakeUserRole = (user) => {
-    const roleInfo = { role: "admin" };
-    axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
-      if (res.data.modifiedCount) {
-        refetch();
-        Swal.fire({
-          position: "top-center",
-          icon: "success",
-          title: `${user.displayName} marked as an admin`,
-          showConfirmButton: false,
-          timer: 2500,
+    // confirmermation before proceed--->>
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Make ${user.displayName} an admin?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Make admin!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const roleInfo = { role: "admin" };
+        // ----->>
+
+        axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
+          if (res.data.modifiedCount) {
+            refetch();
+            Swal.fire({
+              position: "top-center",
+              icon: "success",
+              title: `${user.displayName} is now an Admin`,
+              showConfirmButton: false,
+              timer: 2500,
+            });
+          }
         });
       }
     });
   };
 
   const handleRemoveUserRole = (user) => {
-    const roleInfo = { role: "user" };
-    axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
-      if (res.data.modifiedCount) {
-        refetch();
-        Swal.fire({
-          position: "top-center",
-          icon: "success",
-          title: `${user.displayName} user removed from admin`,
-          showConfirmButton: false,
-          timer: 2500,
+    // confirmermation before proceed--->>
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Remove admin access from ${user.displayName}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Remove admin!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const roleInfo = { role: "user" };
+        // ----->>
+
+        axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
+          if (res.data.modifiedCount) {
+            refetch();
+            Swal.fire({
+              position: "top-center",
+              icon: "success",
+              title: `${user.displayName} is no longer an Admin`,
+              showConfirmButton: false,
+              timer: 2500,
+            });
+          }
         });
       }
     });
   };
-
   return (
     <div>
       <h2 className="text-5xl text-center font-semibold my-5">
@@ -70,7 +99,7 @@ const UserManagement = () => {
           <tbody>
             {/* row 1 */}
             {users.map((user, index) => (
-              <tr>
+              <tr key={user._id}>
                 <td>{index + 1}</td>
                 <td>
                   <div className="flex items-center gap-3">

@@ -18,6 +18,8 @@ import PaymentCancel from "../Pages/DashBord/PaymentCancel";
 import PaymentHistroy from "../Pages/DashBord/PaymentHistroy";
 import ApproveRider from "../Pages/DashBord/ApproveRider";
 import UserManagement from "../Pages/DashBord/UserManagement";
+import Forbiden from "../Pages/Forbiden";
+import AdminRoute from "./AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -107,11 +109,23 @@ export const router = createBrowserRouter([
       },
       {
         path: "approve-rider",
-        Component: ApproveRider,
+        element: (
+          <AdminRoute>
+            <ApproveRider></ApproveRider>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "forbidden-page",
+        Component: Forbiden,
       },
       {
         path: "user-management",
-        Component: UserManagement,
+        element: (
+          <AdminRoute>
+            <UserManagement></UserManagement>
+          </AdminRoute>
+        ),
       },
     ],
   },
