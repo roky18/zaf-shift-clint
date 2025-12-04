@@ -10,6 +10,7 @@ import { Link, NavLink, Outlet } from "react-router";
 import UseRole from "../Hooks/UseRole";
 import { RiEBike2Fill } from "react-icons/ri";
 import { SiGoogletasks } from "react-icons/si";
+import logoicon from "../assets/logo.png";
 
 const DashBordLayout = () => {
   const { role } = UseRole();
@@ -56,10 +57,15 @@ const DashBordLayout = () => {
         <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
           {/* Sidebar content here */}
           <ul className="menu w-full grow">
+            <li>
+              <Link to="/">
+                <img src={logoicon} alt="" />
+              </Link>
+            </li>
             {/* List item */}
             <li>
               <Link
-                to="/"
+                to="/dashbord"
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                 data-tip="Homepage"
               >

@@ -87,7 +87,7 @@ const MyParcels = () => {
                     </Link>
                   )}
                 </td>
-                <td>
+                <td className=" hover:text-blue-500 font-bold ">
                   <Link to={`/parcel-track/${parcel.trackingId}`}>
                     {parcel.trackingId}
                   </Link>
