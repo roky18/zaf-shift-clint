@@ -18,7 +18,7 @@ const AssignRiders = () => {
   });
 
   //   todo Invalidate query after assigning a rider-kaj korte hobe ekane kaj ektu baki ase-?>>
-  const { data: riders = [] } = useQuery({
+  const { data: riders = [], refetch: riderRefetch } = useQuery({
     queryKey: ["riders", selectedParcel?.senderDistrict, "available"],
     enabled: !!selectedParcel,
     queryFn: async () => {
@@ -48,6 +48,7 @@ const AssignRiders = () => {
         if (res.data.modifiedCount) {
           riderModalRef.current.close();
           parcelRefetch();
+          riderRefetch()
           Swal.fire({
             position: "top-center",
             icon: "success",
