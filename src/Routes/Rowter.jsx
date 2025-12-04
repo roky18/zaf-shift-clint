@@ -24,6 +24,7 @@ import AssignRiders from "../Pages/AssignRiders";
 import AssignedDeliveries from "../Pages/AssignedDeliveries";
 import RiderRoute from "./RiderRoute";
 import CompleteDelivery from "../Pages/CompleteDelivery";
+import ParcelTrack from "../Pages/ParcelTrack";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
         loader: () => fetch("/service_center.json").then((res) => res.json()),
       },
 
+      {
+        path: "parcel-track/:trackingId",
+        Component: ParcelTrack,
+      },
       {
         path: "*",
         Component: Error,
